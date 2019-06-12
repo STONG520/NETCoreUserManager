@@ -12,5 +12,6 @@ namespace PhoneWEBAPI.Models
         /// </summary>
         public string userName { get; set; }
         public string password { get; set; }
+        public int userMoney { get;  set; }
     }
 }

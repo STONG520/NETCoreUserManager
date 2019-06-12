@@ -9,5 +9,6 @@ namespace PhoneWEBAPI.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public int userMoney { get; set; }
     }
 }

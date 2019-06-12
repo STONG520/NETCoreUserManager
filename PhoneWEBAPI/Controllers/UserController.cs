@@ -49,13 +49,14 @@ namespace PhoneWEBAPI.Controllers
             {
                 return false;
             }
-
+            if (userManager.FindByNameAsync(loginUser.userName)!=null) {
+                return false;
+            }
             var user = new ApplicationUser
             {
                 UserName=loginUser.userName,
                 PasswordHash=loginUser.password
             };
-
             var result = await userManager.CreateAsync(user,loginUser.password);
 
             if (result.Succeeded)
@@ -66,8 +67,31 @@ namespace PhoneWEBAPI.Controllers
         }
 
         [HttpPost]
-        public string updateUser([FromBody] LoginUser loginUser) {
-            return "";
+        public async Task<bool> updateUser([FromBody] LoginUser loginUser) {
+            var user =await userManager.FindByNameAsync(loginUser.userName);
+            if (user!=null) {
+                user.PasswordHash = loginUser.password;
+                var result= await userManager.UpdateAsync(user);
+                if (result.Succeeded) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        [HttpPost]
+        public async Task<bool> updateUserMoney([FromBody] LoginUser loginUser)
+        {
+            var user = await userManager.FindByNameAsync(loginUser.userName);
+            if (user != null)
+            {
+                user.userMoney = loginUser.userMoney;
+                var result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
